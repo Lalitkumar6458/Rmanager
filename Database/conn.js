@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-const MONGODB_URI ='mongodb+srv://lalitmodi:OZmbeYS8jHtwynOi@cluster0.aijoy4q.mongodb.net/MMS_DB?retryWrites=true&w=majority'
    const ConnectMongo =async()=>{
        try {
-           await mongoose.connect(MONGODB_URI, {
+           await mongoose.connect(process.env.MONGODB_URI, {
                useNewUrlParser: true,
                useUnifiedTopology: true,
            });

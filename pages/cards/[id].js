@@ -1,4 +1,4 @@
-import styles from "../../styles/Cardspage.module.css";
+import styles from "../../styles/Card.module.css";
 import Comment from "../../components/Comment";
 import React, { useState } from "react";
 
