@@ -1,5 +1,4 @@
 import styles from "../../styles/Card.module.css";
-import Comment from "../../components/Comment";
 import React, { useState } from "react";
 
 export const getStaticPaths = async () => {
@@ -76,13 +75,7 @@ const Details = ({ card, comments }) => {
               <i className="fas fa-caret-down"></i>
             )}
           </div>
-          {status ? (
-            <div>
-              {comments.map((comment, key) => (
-                <Comment comment={comment} key={comment.id} />
-              ))}
-            </div>
-          ) : null}
+        
         </div>
       </div>
     </div>
