@@ -220,3 +220,10 @@ body {
 .buttonBox button {
   cursor: pointer;
 }
+.childrenBox{
+  margin-top: 10vh;
+  z-index: 1;
+}
+.SignupBtn{
+  margin-top: 20px;
+}

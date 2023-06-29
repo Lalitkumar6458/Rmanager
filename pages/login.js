@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
 const Login = () => {
@@ -37,7 +38,9 @@ const Login = () => {
                     <input type='password' name='password' placeholder='enter password' value={password} onChange={(event) => setPassword(event.target.value)} />
                     <button type='submit'>Login</button>
                 </form>
-
+<div className='SignupBtn '>
+  If Don't Have Account ? <Link href="/Signup">SignUp</Link>
+</div>
             </div>
         </div>
     )

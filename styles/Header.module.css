@@ -1,0 +1,40 @@
+.wrap{
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 10vh;
+    z-index: 100;
+   
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4%;
+}
+.container ul {
+      display: flex;
+    align-items: center;
+    gap: 40px;
+}
+.container ul li{
+    list-style: none;
+}
+.container ul li a{
+font-size: 25px;
+color: rgb(52, 18, 97);
+text-decoration: none;
+}
+.auth{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.auth a{
+    font-size: 22px;
+    color: #000;
+    text-decoration: none;
+}

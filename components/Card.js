@@ -6,7 +6,7 @@ const Card = ({ photo }) => {
   return (
     <div className={styles.cardWrap}>
       <Link href={"/cards/" + photo.id} key={photo.id} scroll={false}>
-        <a className={styles.a}>
+        <Link className={styles.a}>
           <div className={styles.imageWrap}>
             <img
               src={photo.thumbnailUrl}
@@ -17,7 +17,7 @@ const Card = ({ photo }) => {
           <div className={styles.cardBody}>
             <p className={styles.title}>{photo.title}</p>
           </div>
-        </a>
+        </Link>
       </Link>
     </div>
   );
