@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import styles from "../styles/Header.module.css";
+import styles from "../styles/Card.module.css";
 import Link from "next/link";
 
 const Header = () => {
