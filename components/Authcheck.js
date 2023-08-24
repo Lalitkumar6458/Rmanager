@@ -8,9 +8,11 @@ export { RouteGuard };
 function RouteGuard({ children }) {
     const [user,setUser]=useState()
     let userAuth
+    let staffAuth;
     if (typeof localStorage !== 'undefined'){
 
         userAuth = JSON.parse(localStorage.getItem("User"))
+        staffAuth = JSON.parse(localStorage.getItem('Staff'));
     //  setUser( JSON.parse(localStorage.getItem("User")))
     }
     const router = useRouter();
@@ -40,14 +42,14 @@ function RouteGuard({ children }) {
         // redirect to login page if accessing a private page and not logged in 
         const publicPaths = ['/login','/Signup'];
         const path = url.split('?')[0];
-        if (!userAuth && !publicPaths.includes(path)) {
-            setAuthorized(false);
-            router.push({
-                pathname: '/login',
-                query: { returnUrl: router.asPath }
-            });
+        if (!userAuth && !publicPaths.includes(path) && !staffAuth) {
+          setAuthorized(false);
+          router.push({
+            pathname: "/login",
+            query: { returnUrl: router.asPath },
+          });
         } else {
-            setAuthorized(true);
+          setAuthorized(true);
         }
     }
 

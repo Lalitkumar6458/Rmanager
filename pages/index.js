@@ -3,11 +3,20 @@ import styles from '../styles/Home.module.css'
 import Carousel2 from '../components/Carousel'
 import { useState,useEffect } from 'react'
 import Layout from '../components/Layout'
+import { useRouter } from "next/router";
+
 import Link from 'next/link'
 
 export default function Home() {
-
-  
+  const router = useRouter();
+     if (typeof localStorage !== "undefined") {
+      
+      let staffAuth = JSON.parse(localStorage.getItem("Staff"));
+      if(staffAuth){
+        router.push("/Staff")
+      }
+       //  setUser( JSON.parse(localStorage.getItem("User")))
+     }
 
   return (
     <>

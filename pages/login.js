@@ -22,6 +22,7 @@ const Login = () => {
         if (response.ok) {
             console.log('Data saved to database');
             localStorage.setItem("User", JSON.stringify(data.data))
+            localStorage.removeItem("")
             router.push("/")
 
         } else {
@@ -41,11 +42,13 @@ const onFinishStaff = async (values) => {
     body: JSON.stringify(values),
   });
   const data = await response.json();
-  console.log("data", data);
+  console.log("data", data.User);
+
   if (response.ok) {
     console.log("Data saved to database");
-    localStorage.setItem("User", JSON.stringify(data.data));
-    router.push("/");
+    localStorage.setItem("Staff", JSON.stringify(data.User));
+    router.push("/Staff");
+     localStorage.removeItem("User");
   } else {
     alert(data.error);
     console.log("Error saving data to database");
@@ -65,6 +68,8 @@ const onFinishAdmin = async (values) => {
   if (response.ok) {
     console.log("Data saved to database");
     localStorage.setItem("User", JSON.stringify(data.data));
+     localStorage.removeItem("Staff");
+
     router.push("/Roomgroup");
   } else {
     alert(data.error);
