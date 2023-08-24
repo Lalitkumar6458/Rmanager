@@ -4,6 +4,7 @@ import Carousel2 from '../components/Carousel'
 import { useState,useEffect } from 'react'
 import Layout from '../components/Layout'
 import Link from 'next/link'
+
 export default function Home() {
 
   

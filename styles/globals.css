@@ -2,3 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+.ant-form-item-row{
+    display: flex !important;
+    flex-direction: column !important;
+}
+.ant-form {
+display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+.ant-space{
+
+}
+.ant-form-item-label{
+    text-align: left !important;
+}
+.ant-space,.ant-space-item{
+    width: 100% !important;
+}
+.ant-btn-primary{
+    background-color: rgb(93, 101, 119) !important;
+    color: #fff !important;
+}

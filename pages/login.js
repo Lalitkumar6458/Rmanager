@@ -29,8 +29,27 @@ const Login = () => {
             console.log('Error saving data to database');
         }
     };
-const onFinish = (values) => {
+const onFinishStaff = async (values) => {
   console.log("Success:", values);
+
+  event.preventDefault();
+  const response = await fetch("/api/StaffLogin", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(values),
+  });
+  const data = await response.json();
+  console.log("data", data);
+  if (response.ok) {
+    console.log("Data saved to database");
+    localStorage.setItem("User", JSON.stringify(data.data));
+    router.push("/");
+  } else {
+    alert(data.error);
+    console.log("Error saving data to database");
+  }
 };
 const onFinishAdmin = async (values) => {
   console.log("Success:", values);
@@ -60,7 +79,7 @@ const onFinishFailed = (errorInfo) => {
 };
     return (
       <div className="w-full flex items-center justify-center bg-blue-950 h-screen px-4">
-        <div className="bg-white rounded-lg flex items-center justify-center flex-col">
+        <div className="bg-white rounded-lg flex items-center justify-center flex-col w-[40%]">
           <h2 className="text-[1.4rem] mt-3">Login</h2>
           <div className="w-full h-[50px] flex items-center justify-center ">
             <div className="w-[200px] shadow h-[50px] p-1 rounded-md">
@@ -87,12 +106,12 @@ const onFinishFailed = (errorInfo) => {
             </div>
           </div>
 
-          <div className="px-3">
+          <div className="px-3 w-full">
             {LoginType ? (
               <div>
                 <Form
                   name="StaffLogin"
-                  onFinish={onFinish}
+                  onFinish={onFinishStaff}
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
                 >
@@ -108,18 +127,7 @@ const onFinishFailed = (errorInfo) => {
                   >
                     <Input />
                   </Form.Item>
-                   <Form.Item
-                    label="Staff Email"
-                    name="StaffEmail"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Missing Staff Email!",
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
+             
                   <Form.Item
                     label="Room Group Name"
                     name="RgName"
@@ -156,7 +164,7 @@ const onFinishFailed = (errorInfo) => {
                 </Form>
               </div>
             ) : (
-              <div className="">
+              <div className="w-full">
                 <Form
                   name="AdminLogin"
                   onFinish={onFinishAdmin}

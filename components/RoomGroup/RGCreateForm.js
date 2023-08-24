@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Space } from "antd";
 const { Option } = Select;
@@ -22,16 +22,49 @@ if(!ISSERVER) {
     // Access localStorage
      User=JSON.parse(localStorage.getItem("User"))
 }
-const RGCreateForm = ({ handleCancel }) => {
+const RGCreateForm = ({ handleCancel, getAllData, groupData, isEditGroup }) => {
+  console.log("groupData", groupData, getAllData);
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     console.log("Received values of form:", values);
+    let category = {};
+    values.category.map((item) => {
+      category = {
+        ...category,
+        ...item,
+      };
+    });
+    console.log("data cat", category);
     const ObjectData = {
       groupname: values.rgGroup,
       password: values.password,
       userId: User._id,
-      category: { participate_1: "InRoom", participate_2: "InFood" },
+      category: category,
     };
+    if(isEditGroup){
+      ObjectData["id"] = groupData._id
+    console.log("Received values of form: edt form", values);
+
+    const response = await fetch("/api/CreateGroup", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ObjectData),
+    });
+    const data = await response.json();
+    console.log("data", data);
+    if (response.ok) {
+      console.log("Data saved to database");
+      getAllData();
+      handleCancel();
+      // localStorage.setItem("User", JSON.stringify(data.data))
+      // router.push("\login")
+    } else {
+      console.error("Error saving data to database");
+    }
+
+    }else{
    const response = await fetch("/api/CreateGroup", {
      method: "POST",
      headers: {
@@ -39,23 +72,38 @@ const RGCreateForm = ({ handleCancel }) => {
      },
      body: JSON.stringify(ObjectData),
    });
-        const data = await response.json();
-        console.log("data", data)
-        if (response.ok) {
-            console.log('Data saved to database');
-     
-            // localStorage.setItem("User", JSON.stringify(data.data))
-            // router.push("\login")
-
-        } else {
-            console.error('Error saving data to database');
-        }
+   const data = await response.json();
+   console.log("data", data);
+   if (response.ok) {
+     console.log("Data saved to database");
+     getAllData();
+     handleCancel();
+     // localStorage.setItem("User", JSON.stringify(data.data))
+     // router.push("\login")
+   } else {
+     console.error("Error saving data to database");
+   }
+    }
+ 
   };
   const handleChange = () => {
     form.setFieldsValue({
       sights: [],
     });
   };
+  
+  useEffect(() => {
+    if (isEditGroup) {
+
+    const getCategoryData=Object.keys(groupData.category).map((item)=>({[item]:groupData.category[item]}));
+    console.log(getCategoryData, "getCategoryData");
+      form.setFieldsValue({
+        rgGroup: groupData.groupname,
+        password: groupData.password,
+        category: getCategoryData,
+      });
+    }
+  }, [groupData]);
   return (
     <Form
       form={form}
@@ -88,17 +136,17 @@ const RGCreateForm = ({ handleCancel }) => {
           },
         ]}
       >
-        <Input />
+        <Input.Password />
       </Form.Item>
-      <Form.List name="participate">
+      <Form.List name="category">
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field) => (
+            {fields.map((field, index) => (
               <Space key={field.key} align="baseline">
                 <Form.Item
                   {...field}
-                  label="Participate"
-                  name={[field.name, "participate"]}
+                  label="Category"
+                  name={[field.name, `category_${index + 1}`]}
                   rules={[
                     {
                       required: true,
@@ -119,8 +167,9 @@ const RGCreateForm = ({ handleCancel }) => {
                 onClick={() => add()}
                 block
                 icon={<PlusOutlined />}
+                className=""
               >
-                Add sights
+                Add Category
               </Button>
             </Form.Item>
           </>
@@ -128,12 +177,12 @@ const RGCreateForm = ({ handleCancel }) => {
       </Form.List>
 
       <Form.Item className="">
-        <div className="flex items-center justify-center flex-row gap-3">
+        <div className="flex items-center justify-center flex-row gap-3 mt-2">
           <Button
             className="px-4 py-2 bg-slate-600 text-white flex items-center justify-center"
             htmlType="submit"
           >
-            Submit
+            {isEditGroup ? "Update" : "Submit"}
           </Button>
           <Button
             className="px-4 py-2 border  border-gray-800 text-gray-800 flex items-center justify-center"

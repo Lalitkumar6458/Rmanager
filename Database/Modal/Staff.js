@@ -6,7 +6,7 @@ const StaffSchema = new mongoose.Schema(
     userId: { type: String, required: true},
     staffname: { type: String, required: true },
     staffemail: { type: String, required: true, unique: true },
-    category: { type: Object, required: true },
+    category: { type: Array, required: true },
   },
   { timestamps: true }
 );
