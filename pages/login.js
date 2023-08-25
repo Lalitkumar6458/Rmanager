@@ -47,7 +47,7 @@ const onFinishStaff = async (values) => {
   if (response.ok) {
     console.log("Data saved to database");
     localStorage.setItem("Staff", JSON.stringify(data.User));
-    router.push("/Staff");
+    router.push("/staffpage");
      localStorage.removeItem("User");
   } else {
     alert(data.error);
