@@ -39,6 +39,10 @@ const TopBar = () => {
     },
   ];
 
+  const User=JSON.parse(localStorage.getItem("User"))
+  const Staff=JSON.parse(localStorage.getItem("Staff"))
+
+
     const onchangehandler=(event)=>{
       console.log(event,"click")
     }
@@ -56,10 +60,10 @@ const TopBar = () => {
         <div className="flex items-center gap-2">
           <div className="mr-2">
             <h4 className="text-[12px] font-semibold font-inter">
-              Thomas Anree
+              {User ? User.name : Staff.staffname}
             </h4>
             <p className="text-[10px] font-semibold text-[#637381] text-right font-inter">
-              Ux Designer
+            {User?"Admin":"Staff"}
             </p>
           </div>
           <Image

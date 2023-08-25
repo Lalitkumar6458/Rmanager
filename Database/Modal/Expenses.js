@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const ExpensesSchema = new mongoose.Schema(
   {
-    groupId: { type: String, required: true, unique: true },
-    userId: { type: String, required: true, unique: true },
+    groupId: { type: String, required: true},
+    userId: { type: String, required: true },
     staffId: { type: String, required: true },
     staffname: { type: String, required: true },
     Expense: { type: Number, required: true},
@@ -13,6 +13,7 @@ const ExpensesSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 const Expenses =
   mongoose.models.Expenses || mongoose.model("Expenses", ExpensesSchema);

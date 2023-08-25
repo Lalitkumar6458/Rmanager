@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import Link from 'next/link'
 
 const index = () => {
- 
+const[ExpensesStaffData,setExpensesStaffData]=useState([])
+   const Staff = JSON.parse(localStorage.getItem("Staff"))
+  const dateFormate = (inputDate) => {
+    // Step 1: Parse the input date string
+    const dateObject = new Date(inputDate);
+
+    // Step 2: Format the date object into the desired output format
+
+    // Step 2: Format the date components
+    const day = dateObject.getUTCDate();
+    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+      dateObject
+    );
+    const year = dateObject.getUTCFullYear();
+
+    // Step 3: Combine the formatted components
+    const formattedDate = `${day} ${month} ${year}`;
+    return formattedDate;
+  };
   const groupData = [
     {
       id: 1,
@@ -30,6 +48,23 @@ const index = () => {
       date: "31 jul 2023",
     },
   ];
+
+      async function getPostdata() {
+        // setIsLoading(true);
+
+        const response = await fetch(
+          `api/ExpensesStaff?userId=${Staff.userId}&groupId=${Staff.groupId}&staffId=null`
+        );
+        const data = await response.json();
+        console.log(data);
+        // setIsLoading(false);
+        // setExpensesData(data.data);
+         setExpensesStaffData(data.data);
+        console.log("data", data.data);
+      }
+      useEffect(()=>{
+getPostdata()
+      },[])
   return (
     <Layout>
       <div className="">
@@ -45,19 +80,19 @@ const index = () => {
             Group Transections
           </div>
           <div className="flex flex-col gap-1">
-            {groupData.map((item) => {
+            {ExpensesStaffData.map((item) => {
               return (
-                <div className="flex flex-col bg-gray-600 text-white px-2 py-2">
+                <div className="flex flex-col bg-gray-600 text-white px-2 py-2" key={item._id}>
                   <div className="flex items-center justify-between">
                     <div className="">
-                      <h5>{item.date}</h5>
-                      <h4 className='font-semibold'>{item.staffname}</h4>
+                      <h5>{dateFormate(item.date)}</h5>
+                      <h4 className="font-semibold">{item.staffname}</h4>
                     </div>
                     <div className="">{item.category}</div>
-                    <div className="font-semibold">{item.expense}</div>
+                    <div className="font-semibold">{item.Expense}</div>
                   </div>
                   <div className="w-full">
-                    <p>{item.note}</p>
+                    <p>{item.node}</p>
                   </div>
                 </div>
               );

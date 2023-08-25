@@ -84,7 +84,7 @@ const onFinishFailed = (errorInfo) => {
 };
     return (
       <div className="w-full flex items-center justify-center bg-blue-950 h-screen px-4">
-        <div className="bg-white rounded-lg flex items-center justify-center flex-col w-[40%]">
+        <div className="bg-white rounded-lg flex items-center justify-center flex-col w-[95%] md:w-[40%]">
           <h2 className="text-[1.4rem] mt-3">Login</h2>
           <div className="w-full h-[50px] flex items-center justify-center ">
             <div className="w-[200px] shadow h-[50px] p-1 rounded-md">

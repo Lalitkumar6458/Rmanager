@@ -1,13 +1,14 @@
 import SubTopbar from '../../components/Base/SubTopbar'
-import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, Popconfirm } from "antd";
 import Addex from '../../components/StaffCon/Addex';
 import { FaEdit } from 'react-icons/fa';
 import {AiFillDelete} from "react-icons/ai"
 const index = () => {
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [isEditEx, setIsEditEx] = useState(false);
-
+     const[expensesData,setExpensesData]=useState([])
+   const Staff = JSON.parse(localStorage.getItem("Staff"));
      const showModal = () => {
        setIsModalOpen(true);
      };
@@ -38,12 +39,68 @@ showModal()
           date: "01 Aug 2023",
         },
       ];
+      const dateFormate = (inputDate) => {
+      
+        // Step 1: Parse the input date string
+        const dateObject = new Date(inputDate);
+
+        // Step 2: Format the date object into the desired output format
+   
+
+     // Step 2: Format the date components
+     const day = dateObject.getUTCDate();
+     const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+       dateObject
+     );
+     const year = dateObject.getUTCFullYear();
+
+     // Step 3: Combine the formatted components
+     const formattedDate = `${day} ${month} ${year}`;
+        return formattedDate;
+      };
+      
       const EditExpenses=(data)=>{
         setEditData(data)
         setIsEditEx(true)
 showModal()
 
       }
+       async function getPostdata() {
+        //  setIsLoading(true);
+
+         const response = await fetch(
+           `api/ExpensesStaff?userId=${Staff.userId}&groupId=${Staff.groupId}&staffId=${Staff._id}`
+         );
+         const data = await response.json();
+         console.log(data);
+         // setIsLoading(false);
+setExpensesData(data.data);
+         // setRGroupData(data.allData);
+         console.log("data", data.data);
+       }
+       useEffect(() => {
+         getPostdata();
+       }, []);
+
+       const deleteExpenses=async(id)=>{
+ const response = await fetch("/api/ExpensesStaff", {
+   method: "DELETE",
+   headers: {
+     "Content-Type": "application/json",
+   },
+   body: JSON.stringify({ id, userId:Staff.userId }),
+ });
+      const data = await response.json();
+      console.log("data", data);
+      if (response.ok) {
+        console.log("Data saved to database");
+        getPostdata();
+        // localStorage.setItem("User", JSON.stringify(data.data))
+        // router.push("\login")
+      } else {
+        console.error("Error saving data to database");
+      }
+       }
   return (
     <div>
       <SubTopbar data={{ heading: "Your Expenses" }} />
@@ -62,28 +119,38 @@ showModal()
             Recent Transections
           </div>
           <div className="flex flex-col gap-[2px]">
-            {dumyData.map((item) => {
+            {expensesData.map((item) => {
               return (
                 <div
                   className="flex items-center justify-between bg-slate-600 text-white px-4 py-2"
-                  key={item.id}
+                  key={item._id}
                 >
                   <div className="w-[65%] flex-[65%]">
-                    <h5 className="font-semibold mb-1">{item.date}</h5>
+                    <h5 className="font-semibold mb-1">
+                      {dateFormate(item.date)}
+                    </h5>
                     <p className="border rounded w-fit px-[4px]">
                       {item.category}
                     </p>
-                    <h4 className="text-[1rem]">{item.note}</h4>
+                    <h4 className="text-[1rem]">{item.node}</h4>
                   </div>
                   <div className="text-[1.3rem] font-semibold flex-[20%] w-[20%]">
-                    {item.expense}
+                    {item.Expense}
                   </div>
                   <div className="flex-[15%] w-[15%] flex items-center  gap-4 flex-col">
                     <FaEdit
                       className="text-[1.5rem] text-yellow-600"
                       onClick={() => EditExpenses(item)}
                     />
-                    <AiFillDelete className="text-[1.5rem] text-red-700" />
+                    <Popconfirm
+                      title="Delete the Expenses"
+                      description="Are you sure to delete this Expenses?"
+                      onConfirm={()=>deleteExpenses(item._id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <AiFillDelete className="text-[1.5rem] text-red-700" />
+                    </Popconfirm>
                   </div>
                 </div>
               );
@@ -98,7 +165,12 @@ showModal()
         onCancel={handleCancel}
         footer={null}
       >
-        <Addex editData={EditData} isEditEx={isEditEx} />
+        <Addex
+          editData={EditData}
+          getAddedData={getPostdata}
+          isEditEx={isEditEx}
+          handleCancel={handleCancel}
+        />
       </Modal>
     </div>
   );

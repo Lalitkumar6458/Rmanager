@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import { Button, Form, Input, InputNumber, Select, DatePicker } from "antd";
 const { Option } = Select;
@@ -12,9 +12,10 @@ const layout = {
   },
 };
 
-const Addex = ({editData,isEditEx}) => {
+const Addex = ({ editData, isEditEx, getAddedData, handleCancel }) => {
   const formRef = React.useRef(null);
   const dateFormat = "DD-MM-YYYY";
+  const Staff = JSON.parse(localStorage.getItem("Staff"));
   const onGenderChange = (value) => {
     switch (value) {
       case "male":
@@ -36,13 +37,77 @@ const Addex = ({editData,isEditEx}) => {
         break;
     }
   };
-  const onFinish = (values) => {
-    if (isEditEx) {
-        
-        console.log("Edit api call",values);
+  console.log(editData, "editData");
+  const onFinish = async (values) => {
+    console.log("data", values.date.$D, values.date.$M, values.date.$y);
+let day=""
+    if(values.date.$D<10){
+day = "0" + values.date.$D;
     }else{
-        console.log("Save api call", values);
+day = values.date.$D;
+    }
+    let month=""
+    if (values.date.$M < 10) {
+      month = `0${values.date.$M + 1}`
+    } else {
+      month = values.date.$M + 1;
+    }
+    const newDate = `${values.date.$y}-${month}-${day}`;
+    console.log("newDate", newDate);
+    const ObjectData = {
+      groupId: Staff.groupId,
+      userId: Staff.userId,
+      staffId: Staff._id,
+      staffname: Staff.staffname,
+      Expense: values.expense,
+      date: new Date(newDate), // Assign the date
+      node: values.note,
+      category: values.category,
+    };
+    console.log("ObjectData", ObjectData);
+    if (isEditEx) {
+      console.log("Edit api call", values);
+      ObjectData['id']=editData._id
+ const response = await fetch("/api/ExpensesStaff", {
+   method: "PUT",
+   headers: {
+     "Content-Type": "application/json",
+   },
+   body: JSON.stringify(ObjectData),
+ });
+ const data = await response.json();
+ console.log("data", data);
+ if (response.ok) {
+   console.log("Data Update to database");
+    getAddedData();
+   handleCancel();
+   // localStorage.setItem("User", JSON.stringify(data.data))
+   // router.push("\login")
+ } else {
+   console.error("Error saving data to database");
+ }
 
+    } else {
+      console.log("Save api call", values);
+
+      const response = await fetch("/api/ExpensesStaff", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ObjectData),
+      });
+      const data = await response.json();
+      console.log("data", data);
+      if (response.ok) {
+        console.log("Data saved to database");
+        getAddedData();
+        handleCancel();
+        // localStorage.setItem("User", JSON.stringify(data.data))
+        // router.push("\login")
+      } else {
+        console.error("Error saving data to database");
+      }
     }
   };
   const onReset = () => {
@@ -50,23 +115,50 @@ const Addex = ({editData,isEditEx}) => {
   };
 
   // Date object
-  const date = new Date();
+ const formateDate=(datenew)=>{
+  let date
+  if (datenew) {
+const dateFormat = "DD-MM-YYYY";
 
-  let currentDay = String(date.getDate()).padStart(2, "0");
+const inputDate = new Date(datenew);
+const day = inputDate.getUTCDate().toString().padStart(2, "0");
+const month = (inputDate.getUTCMonth() + 1).toString().padStart(2, "0");
+const year = inputDate.getUTCFullYear();
 
-  let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+const formattedDate = dateFormat
+  .replace("DD", day)
+  .replace("MM", month)
+  .replace("YYYY", year);
+  console.log(formattedDate);
+return formattedDate;
 
-  let currentYear = date.getFullYear();
+  } else {
+    date = new Date();
+    console.log(date,"else");
+    let currentDay = String(date.getDate()).padStart(2, "0");
+   
+    let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+   
+    let currentYear = date.getFullYear();
+   
+    // we will display the date as DD-MM-YYYY
+   
+    let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+    return currentDate;
+  }
 
-  // we will display the date as DD-MM-YYYY
+ }
+useEffect(() => {
+  if (isEditEx) {
+    formRef.current?.setFieldsValue({
+      expense: editData.Expense,
+      category: editData.category,
+      date: dayjs(formateDate(editData.date), dateFormat),
+      note: editData.node,
+    });
+  }
+}, [editData]);
 
-  let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
-
-    if(isEditEx){
-        (editData.date = dayjs("02-05-2023", dateFormat));
-          console.log("editData", editData);
-       formRef.current?.setFieldsValue(editData);
-    }
   return (
     <Form
       {...layout}
@@ -75,6 +167,9 @@ const Addex = ({editData,isEditEx}) => {
       onFinish={onFinish}
       style={{
         maxWidth: 600,
+      }}
+      initialValues={{
+        date: dayjs(formateDate(), dateFormat),
       }}
     >
       <Form.Item
@@ -99,12 +194,17 @@ const Addex = ({editData,isEditEx}) => {
       >
         <Select
           placeholder="Select a Category"
-          onChange={onGenderChange} 
+          onChange={onGenderChange}
           allowClear
-        >   
-          <Option value="InRoom"> In Room</Option>
-          <Option value="InFood">In Food</Option>
-          <Option value="InTea">In Tea</Option>
+        >
+          {Staff.category.map((item) => {
+            return (
+              <Option value={item} key={item}>
+                {" "}
+                {item}
+              </Option>
+            );
+          })}
         </Select>
       </Form.Item>
       <Form.Item
@@ -116,11 +216,7 @@ const Addex = ({editData,isEditEx}) => {
           },
         ]}
       >
-        <DatePicker
-          className="w-full"
-          defaultValue={dayjs(currentDate, dateFormat)}
-          format={dateFormat}
-        />
+        <DatePicker className="w-full" format={dateFormat} />
       </Form.Item>
       <Form.Item
         name="note"
@@ -133,48 +229,25 @@ const Addex = ({editData,isEditEx}) => {
       >
         <TextArea />
       </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) =>
-          prevValues.gender !== currentValues.gender
-        }
-      >
-        {({ getFieldValue }) =>
-          getFieldValue("gender") === "other" ? (
-            <Form.Item
-              name="customizeGender"
-              label="Customize Gender"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          ) : null
-        }
-      </Form.Item>
+
       <Form.Item className="flex items-center justify-center w-full">
         <div className="flex items-center justify-center gap-4 w-full">
           <Button
             className="px-4 py-2 bg-slate-600 text-white flex items-center justify-center"
             htmlType="submit"
           >
-            {isEditEx?"Update":"Submit"}
+            {isEditEx ? "Update" : "Submit"}
           </Button>
-           {isEditEx?
-           null
-           :<Button
-            className="px-4 py-2 border  border-gray-800 text-gray-800 flex items-center justify-center"
-            htmlType="button"
-            onClick={onReset}
-          >
-            Reset
-          </Button>}
-          
+          {isEditEx ? null : (
+            <Button
+              className="px-4 py-2 border  border-gray-800 text-gray-800 flex items-center justify-center"
+              htmlType="button"
+              onClick={onReset}
+            >
+              Reset
+            </Button>
+          )}
         </div>
-
       </Form.Item>
     </Form>
   );
