@@ -24,16 +24,15 @@ const AddStaffForm = ({
   groupData,
   StaffData,
   isEditStaff,
+  setIsEditStaff,
 }) => {
   const [form] = Form.useForm();
   console.log("groupData app", groupData?.category, StaffData);
 
   const categoryData = groupData?.category
-      ? Object.keys(groupData?.category).map(
-          (item) => groupData?.category[item]
-        )
-      : []
-    
+    ? Object.keys(groupData?.category).map((item) => groupData?.category[item])
+    : [];
+
   const onFinish = async (values) => {
     console.log("Received values of form:", values);
     const userId = JSON.parse(localStorage.getItem("User"))._id;
@@ -45,53 +44,49 @@ const AddStaffForm = ({
       staffemail: values.email,
       category: values.category,
     };
-    
-    if(isEditStaff){
+
+    if (isEditStaff) {
       ObjectData["id"] = StaffData._id;
- const response = await fetch("/api/CreateStaff", {
-   method: "PUT",
-   headers: {
-     "Content-Type": "application/json",
-   },
-   body: JSON.stringify(ObjectData),
- });
- const data = await response.json();
- console.log("data", data);
- if (response.ok) {
-   console.log("Data Update to database");
-   getAllData();
-   handleCancel();
+      const response = await fetch("/api/CreateStaff", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ObjectData),
+      });
+      const data = await response.json();
+      console.log("data", data);
+      if (response.ok) {
+        console.log("Data Update to database");
+        getAllData();
+        handleCancel();
 
-   // localStorage.setItem("User", JSON.stringify(data.data))
-   // router.push("\login")
- } else {
-   console.error("Error saving data to database");
- }
-    }else{
+        // localStorage.setItem("User", JSON.stringify(data.data))
+        // router.push("\login")
+      } else {
+        console.error("Error saving data to database");
+      }
+    } else {
+      const response = await fetch("/api/CreateStaff", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ObjectData),
+      });
+      const data = await response.json();
+      console.log("data", data);
+      if (response.ok) {
+        console.log("Data saved to database");
+        getAllData();
+        handleCancel();
 
- const response = await fetch("/api/CreateStaff", {
-   method: "POST",
-   headers: {
-     "Content-Type": "application/json",
-   },
-   body: JSON.stringify(ObjectData),
- });
- const data = await response.json();
- console.log("data", data);
- if (response.ok) {
-   console.log("Data saved to database");
-   getAllData();
-   handleCancel();
-
-   // localStorage.setItem("User", JSON.stringify(data.data))
-   // router.push("\login")
- } else {
-   console.error("Error saving data to database");
- }
+        // localStorage.setItem("User", JSON.stringify(data.data))
+        // router.push("\login")
+      } else {
+        console.error("Error saving data to database");
+      }
     }
-
-
-   
   };
   const handleChange = () => {
     form.setFieldsValue({
@@ -99,16 +94,16 @@ const AddStaffForm = ({
     });
   };
 
-    useEffect(() => {
-      if (isEditStaff) {
-        console.log(StaffData, "staff data");
-        form.setFieldsValue({
-          staffName: StaffData.staffname,
-          email: StaffData.staffemail,
-          category: StaffData.category,
-        });
-      }
-    }, [groupData, StaffData]);
+  useEffect(() => {
+    if (isEditStaff) {
+      console.log(StaffData, "staff data");
+      form.setFieldsValue({
+        staffName: StaffData.staffname,
+        email: StaffData.staffemail,
+        category: StaffData.category,
+      });
+    }
+  }, [groupData, StaffData]);
   return (
     <Form
       form={form}

@@ -21,11 +21,13 @@ const [StaffData, setStaffData] = useState([]);
 const [isLoading,setIsLoading]=useState(false)
   const showModal = () => {
     setIsModalOpen(true);
+    setIsEditGroup(false)
   };
     const showModalStaff = (groupId,groupData) => {
       setIsModalOpenStaff(true);
       setGroupId(groupId);
       setGroupData(groupData);
+      setIsEditStaff(false)
     };
   const handleOk = () => {
     setIsModalOpen(false);
@@ -265,6 +267,7 @@ setIsEditStaff(true);
             groupData={groupData}
             StaffData={StaffData}
             isEditStaff={isEditStaff}
+            setIsEditStaff={setIsEditStaff}
           />
         </div>
       </Modal>
