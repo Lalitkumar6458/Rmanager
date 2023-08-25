@@ -10,7 +10,7 @@ export default function Home() {
       
       let staffAuth = JSON.parse(localStorage.getItem("Staff"));
       if(staffAuth){
-        router.push("/Staff")
+        router.push("/staffpage")
       }
        //  setUser( JSON.parse(localStorage.getItem("User")))
      }
