@@ -78,6 +78,7 @@ day = values.date.$D;
  const data = await response.json();
  console.log("data", data);
  if (response.ok) {
+  formRef.current?.resetFields();
    console.log("Data Update to database");
     getAddedData();
    handleCancel();
@@ -100,6 +101,7 @@ day = values.date.$D;
       const data = await response.json();
       console.log("data", data);
       if (response.ok) {
+        formRef.current?.resetFields();
         console.log("Data saved to database");
         getAddedData();
         handleCancel();

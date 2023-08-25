@@ -57,6 +57,7 @@ const AddStaffForm = ({
       const data = await response.json();
       console.log("data", data);
       if (response.ok) {
+             form.resetFields();
         console.log("Data Update to database");
         getAllData();
         handleCancel();
@@ -77,6 +78,7 @@ const AddStaffForm = ({
       const data = await response.json();
       console.log("data", data);
       if (response.ok) {
+         form.resetFields();
         console.log("Data saved to database");
         getAllData();
         handleCancel();

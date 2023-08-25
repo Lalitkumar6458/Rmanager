@@ -16,6 +16,7 @@ const TopBar = () => {
   };
       const LogoutFun = () => {
         localStorage.removeItem("User");
+        localStorage.removeItem("Staff");
         router.push("/login");
       };
   const handleMenuClick = (e) => {

@@ -56,6 +56,7 @@ const RGCreateForm = ({ handleCancel, getAllData, groupData, isEditGroup }) => {
     console.log("data", data);
     if (response.ok) {
       console.log("Data saved to database");
+       form.resetFields();
       getAllData();
       handleCancel();
       // localStorage.setItem("User", JSON.stringify(data.data))
@@ -76,6 +77,7 @@ const RGCreateForm = ({ handleCancel, getAllData, groupData, isEditGroup }) => {
    console.log("data", data);
    if (response.ok) {
      console.log("Data saved to database");
+      form.resetFields();
      getAllData();
      handleCancel();
      // localStorage.setItem("User", JSON.stringify(data.data))
