@@ -15,6 +15,7 @@ export default async function handler(req, res) {
       const group = await Rgroup.findOne({ groupname: RgName }).maxTimeMS(
         15000
       );
+      console.log("group boxfh", group);
       const staffMember = await Staff.findOne({
         staffemail: StaffEmail,
       }).maxTimeMS(15000);
@@ -33,6 +34,7 @@ console.log("group", group, staffMember );
             User:staffMember,
           });
         } else {
+            console
           // Group not found or incorrect group password
           return res.status(401).json({ error: "Invalid group credentials" });
         }
