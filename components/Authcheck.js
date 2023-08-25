@@ -7,13 +7,13 @@ export { RouteGuard };
 
 function RouteGuard({ children }) {
     const [user,setUser]=useState()
-    let userAuth
-    let staffAuth;
+let AuthCheck
     if (typeof localStorage !== 'undefined'){
 
-        userAuth = JSON.parse(localStorage.getItem("User"))
-        staffAuth = JSON.parse(localStorage.getItem('Staff'));
+      const  userAuth = JSON.parse(localStorage.getItem("User"))
+      const  staffAuth = JSON.parse(localStorage.getItem('Staff'));
     //  setUser( JSON.parse(localStorage.getItem("User")))
+    AuthCheck = userAuth ? userAuth : staffAuth;
     }
     const router = useRouter();
     const [authorized, setAuthorized] = useState(false);
@@ -43,7 +43,7 @@ function RouteGuard({ children }) {
         const publicPaths = ["/login", "/Signup"];
         const path = url.split('?')[0];
         
-        if ((!userAuth && !staffAuth && !publicPaths.includes(path))) {
+        if (!AuthCheck && !publicPaths.includes(path)) {
           setAuthorized(false);
           router.push({
             pathname: "/login",
