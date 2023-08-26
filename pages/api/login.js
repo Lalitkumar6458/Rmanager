@@ -14,6 +14,7 @@ export default async function handler(req, res) {
                 const { password, ...userData } = user._doc;
 
                 // Successful login
+                console.log("login succes")
                 res.status(200).json({ message: 'Login successful',data: userData });
             } else {
                 // Invalid credentials

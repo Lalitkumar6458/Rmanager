@@ -33,7 +33,14 @@ export const getExpensesData = async (req, res) => {
     }
 
     if (Expense.length > 0) {
-      res.status(200).json({ data: Expense });
+        const totalExpenseAmount = Expense.reduce(
+          (total, post) => total + post.Expense,
+          0
+        );
+        console.log("totalExpenseAmount", totalExpenseAmount);
+      res
+        .status(200)
+        .json({ data: Expense, totalExpenseGroupAmount: totalExpenseAmount });  
     } else {
       res.status(404).json({ error: "No posts found for the user", data: [] });
     }

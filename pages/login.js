@@ -2,36 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input } from "antd";
+
 const Login = () => {
     const[LoginType,setLoginType]=useState(false)
     const router = useRouter()
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        console.log("data", data)
-        if (response.ok) {
-            console.log('Data saved to database');
-            localStorage.setItem("User", JSON.stringify(data.data))
-            localStorage.removeItem("")
-            router.push("/")
-
-        } else {
-            alert(data.error)
-            console.log('Error saving data to database');
-        }
-    };
 const onFinishStaff = async (values) => {
-  console.log("Success:", values);
 
   event.preventDefault();
   const response = await fetch("/api/StaffLogin", {
@@ -42,10 +18,10 @@ const onFinishStaff = async (values) => {
     body: JSON.stringify(values),
   });
   const data = await response.json();
-  console.log("data", data.User);
+
 
   if (response.ok) {
-    console.log("Data saved to database");
+    console.log("Login Succes to database");
     localStorage.setItem("Staff", JSON.stringify(data.User));
     router.push("/staffpage");
      localStorage.removeItem("User");

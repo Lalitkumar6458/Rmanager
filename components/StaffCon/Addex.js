@@ -158,8 +158,15 @@ useEffect(() => {
       date: dayjs(formateDate(editData.date), dateFormat),
       note: editData.node,
     });
+  }else{
+    formRef.current?.setFieldsValue({
+      expense: '',
+      category: '',
+      date: dayjs(formateDate(), dateFormat),
+      note: '',
+    });
   }
-}, [editData]);
+}, [editData, isEditEx]);
 
   return (
     <Form

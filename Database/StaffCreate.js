@@ -22,18 +22,65 @@ export const CreateStaff = async (req, res) => {
       const mailOptions = {
         from: "lalitkumar6458@gmail.com",
         to: staffemail,
-        subject: `Room Managment You Added in ${group.groupname} `,
-        html: (
-         ` <div className="">
-            <h1>Group Name :  ${group.groupname} </h1>
-            <br />
-            <h3>Group Password: ${group.password}</h3> <br />
-            <h3>Your Email:  ${staffemail}</h3> <br />
-            <h3>
-              Login <a href="https://nextjscurd.vercel.app/">Room Managment </a>
-            </h3>
-          </div>`
-        ),
+        subject: `Welcome to the Expense Management Portal for ${group.groupname}`,
+        html: ` <!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f7f7f7;
+    }
+    .header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .group-details {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .login-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Expense Management Portal</h1>
+    </div>
+    <div class="group-details">
+      <h2>Group Information</h2>
+      <p>Group Name: ${group.groupname}</p>
+      <p>Group Password: ${group.password}</p>
+      <p>Your Email: ${staffemail}</p>
+    </div>
+    <div class="login-link">
+      <h3>Login to Your Account</h3>
+      <p>Use the provided group name and password to log in to the Expense Management Portal.</p>
+      <a href="https://rmanager.vercel.app/">Access the Portal</a>
+    </div>
+    <div class="message">
+      <p>Start managing your expenses with ease. Simply log in, add your expenses, and stay on top of your finances.</p>
+    </div>
+  </div>
+</body>
+</html>
+`,
       };
 
       try {

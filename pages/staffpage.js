@@ -4,7 +4,14 @@ import Link from "next/link";
 
 const staffpage = () => {
     const [ExpensesStaffData, setExpensesStaffData] = useState([]);
-    const Staff = JSON.parse(localStorage.getItem("Staff"));
+    const [GTotalAmount,setTotalAmount]=useState(0)
+    const [YourEx,setYourEx]=useState(0)
+   let Staff;
+   let YourExAmount
+   if (typeof localStorage !== "undefined") {
+     Staff = JSON.parse(localStorage.getItem("Staff"));
+YourExAmount = localStorage.getItem("YourEx");
+   }
     const dateFormate = (inputDate) => {
       // Step 1: Parse the input date string
       const dateObject = new Date(inputDate);
@@ -22,32 +29,6 @@ const staffpage = () => {
       const formattedDate = `${day} ${month} ${year}`;
       return formattedDate;
     };
-    const groupData = [
-      {
-        id: 1,
-        staffname: "Staff1 kumar",
-        expense: 234,
-        note: "dumy expesset testing",
-        category: "In Room",
-        date: "30 jul 2023",
-      },
-      {
-        id: 2,
-        staffname: "Staff2 kumar",
-        expense: 674,
-        note: "dumy expesset testing",
-        category: "In Room",
-        date: "29 jul 2023",
-      },
-      {
-        id: 3,
-        staffname: "Staff3 kumar",
-        expense: 467,
-        note: "dumy tryujnv testing",
-        category: "In Room",
-        date: "31 jul 2023",
-      },
-    ];
 
     async function getPostdata() {
       // setIsLoading(true);
@@ -59,11 +40,13 @@ const staffpage = () => {
       console.log(data);
       // setIsLoading(false);
       // setExpensesData(data.data);
+      setTotalAmount(data.totalExpenseGroupAmount);
       setExpensesStaffData(data.data);
       console.log("data", data.data);
     }
     useEffect(() => {
       getPostdata();
+setYourEx(YourExAmount);
     }, []);
   return (
     <Layout>
@@ -100,6 +83,18 @@ const staffpage = () => {
                 </div>
               );
             })}
+          </div>
+          <div className="fixed bottom-0 bg-white shadow-xl grid grid-cols-2 w-full border">
+            <div className=" border-b text-[1.2rem] pl-3 border-r py-2">
+              G Total Ex:
+              <span className="text-[1.5rem] font-semibold ml-2">
+                {GTotalAmount}
+              </span>
+            </div>
+            <div className="  border-b text-[1.2rem] pl-3 py-2 ">
+              Your Total Ex:
+              <span className="text-[1.5rem] font-semibold ml-2">{YourEx}</span>
+            </div>
           </div>
         </div>
       </div>

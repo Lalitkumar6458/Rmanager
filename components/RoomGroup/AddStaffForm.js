@@ -2,21 +2,7 @@ import React, { useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select,Checkbox,
   Col,Row } from "antd";
-const { Option } = Select;
-const areas = [
-  {
-    label: "Beijing",
-    value: "Beijing",
-  },
-  {
-    label: "Shanghai",
-    value: "Shanghai",
-  },
-];
-const sights = {
-  Beijing: ["Tiananmen", "Great Wall"],
-  Shanghai: ["Oriental Pearl", "The Bund"],
-};
+
 const AddStaffForm = ({
   handleCancel,
   getAllData,
@@ -98,14 +84,24 @@ const AddStaffForm = ({
 
   useEffect(() => {
     if (isEditStaff) {
-      console.log(StaffData, "staff data");
+      console.log("if use");
       form.setFieldsValue({
         staffName: StaffData.staffname,
         email: StaffData.staffemail,
         category: StaffData.category,
       });
+    } else {
+      console.log("else use");
+
+      form.setFieldsValue({
+        staffName: "",
+        email: "",
+        category: [],
+      });
     }
-  }, [groupData, StaffData]);
+  }, [groupData, StaffData, isEditStaff]);
+
+
   return (
     <Form
       form={form}

@@ -8,7 +8,10 @@ const index = () => {
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [isEditEx, setIsEditEx] = useState(false);
      const[expensesData,setExpensesData]=useState([])
-   const Staff = JSON.parse(localStorage.getItem("Staff"));
+     let Staff;
+     if (typeof localStorage !== "undefined") {
+    Staff = JSON.parse(localStorage.getItem("Staff"));
+     }
      const showModal = () => {
        setIsModalOpen(true);
      };
@@ -76,7 +79,8 @@ showModal()
          // setIsLoading(false);
 setExpensesData(data.data);
          // setRGroupData(data.allData);
-         console.log("data", data.data);
+         console.log("data", data.data, data.totalExpenseAmount);
+         localStorage.setItem("YourEx", data.totalExpenseGroupAmount);
        }
        useEffect(() => {
          getPostdata();
@@ -159,7 +163,7 @@ setExpensesData(data.data);
         </div>
       </div>
       <Modal
-        title="Basic Modal"
+        title={isEditEx?"Edit Expenses":"Add Expenses"}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

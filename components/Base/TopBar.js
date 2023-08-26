@@ -5,7 +5,9 @@ import Image from 'next/image';
 import { MenuFoldOutlined } from "@ant-design/icons";
 import { Button, Drawer } from "antd";
 import { useRouter } from "next/router";
+
 const TopBar = () => {
+
     const router = useRouter();
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -17,6 +19,7 @@ const TopBar = () => {
       const LogoutFun = () => {
         localStorage.removeItem("User");
         localStorage.removeItem("Staff");
+        // logout()
         router.push("/login");
       };
   const handleMenuClick = (e) => {
@@ -39,11 +42,14 @@ const TopBar = () => {
       key: "3",
     },
   ];
+  let User;
+  let Staff;
+ if (typeof localStorage !== 'undefined'){
 
-  const User=JSON.parse(localStorage.getItem("User"))
-  const Staff=JSON.parse(localStorage.getItem("Staff"))
+   User=JSON.parse(localStorage.getItem("User"))
+  Staff=JSON.parse(localStorage.getItem("Staff"))
 
-
+ }
     const onchangehandler=(event)=>{
       console.log(event,"click")
     }
@@ -55,13 +61,13 @@ const TopBar = () => {
     <div className="w-full h-[60px] shadow-sm flex items-center justify-between px-[10px]">
       <div className="flex items-center gap-4">
         <MenuFoldOutlined className="text-[1.5rem]" onClick={showDrawer} />
-        <h4 className="text-[1.5rem]">Logo</h4>
+        <h4 className="text-[1.5rem]">Room Manager</h4>
       </div>
       <div className="flex items-center gap-[25px]">
         <div className="flex items-center gap-2">
           <div className="mr-2">
             <h4 className="text-[12px] font-semibold font-inter">
-              {User ? User.name : Staff.staffname}
+              {User ? User?.name : Staff?.staffname}
             </h4>
             <p className="text-[10px] font-semibold text-[#637381] text-right font-inter">
             {User?"Admin":"Staff"}
