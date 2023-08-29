@@ -4,14 +4,8 @@ import Rgroup from "../../Database/Modal/Rgroup";
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const { StaffEmail, RgName, Rgpassword } = req.body;
-    console.log(req.body, "req.body");
-
     try {
-      // Find the staff member by email
-      
-      // Check if the staff member exists and the provided password matches
-      
-      // Find the group by name
+
       const group = await Rgroup.findOne({ groupname: RgName }).maxTimeMS(
         15000
       );
@@ -19,8 +13,6 @@ export default async function handler(req, res) {
       const staffMember = await Staff.findOne({
         staffemail: StaffEmail,
       }).maxTimeMS(15000);
-console.log("group", group, staffMember );
-
         // Check if the group exists and its password matches
         if (
           group &&
@@ -34,7 +26,7 @@ console.log("group", group, staffMember );
             User:staffMember,
           });
         } else {
-            console
+      
           // Group not found or incorrect group password
           return res.status(401).json({ error: "Invalid group credentials" });
         }

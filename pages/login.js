@@ -10,47 +10,63 @@ const Login = () => {
 const onFinishStaff = async (values) => {
 
   event.preventDefault();
-  const response = await fetch("/api/StaffLogin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-  const data = await response.json();
+    try {
+       const response = await fetch("/api/StaffLogin", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify(values),
+       });
+       const data = await response.json();
 
-
-  if (response.ok) {
-    console.log("Login Succes to database");
-    localStorage.setItem("Staff", JSON.stringify(data.User));
-    router.push("/staffpage");
-     localStorage.removeItem("User");
-  } else {
-    alert(data.error);
-    console.log("Error saving data to database");
-  }
+       if (response.ok) {
+         console.log("Login Succes to database");
+         localStorage.setItem("Staff", JSON.stringify(data.User));
+         router.push("/staffpage");
+         localStorage.removeItem("User");
+       } else {
+         alert(data.error);
+         console.log("Error saving data to database");
+       }
+    }
+    catch(error){
+console.log(error);
+alert("error"+error)
+    }
+ 
 };
 const onFinishAdmin = async (values) => {
   console.log("Success:", values);
-  const response = await fetch("/api/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email: values.username, password: values.password }),
-  });
-  const data = await response.json();
-  console.log("data", data);
-  if (response.ok) {
-    console.log("Data saved to database");
-    localStorage.setItem("User", JSON.stringify(data.data));
-     localStorage.removeItem("Staff");
+  try {
+     const response = await fetch("/api/login", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         email: values.username,
+         password: values.password,
+       }),
+     });
+     const data = await response.json();
+     console.log("data", data);
+     if (response.ok) {
+       console.log("Data saved to database");
+       localStorage.setItem("User", JSON.stringify(data.data));
+       localStorage.removeItem("Staff");
 
-    router.push("/Roomgroup");
-  } else {
-    alert(data.error);
-    console.log("Error saving data to database");
+       router.push("/Roomgroup");
+     } else {
+       alert(data.error);
+       console.log("Error saving data to database");
+     }
+
+  } catch (error) {
+console.log("error",error)
+alert("eeror " + error);
   }
+ 
 };
 const onFinishFailedAdmin = (errorInfo) => {
   console.log("Failed:", errorInfo);
