@@ -7,10 +7,9 @@ const staffpage = () => {
     const [GTotalAmount,setTotalAmount]=useState(0)
     const [YourEx,setYourEx]=useState(0)
    let Staff;
-   let YourExAmount
+   let YourExAmount=0
    if (typeof localStorage !== "undefined") {
      Staff = JSON.parse(localStorage.getItem("Staff"));
-YourExAmount = localStorage.getItem("YourEx");
    }
     const dateFormate = (inputDate) => {
       // Step 1: Parse the input date string
@@ -45,8 +44,12 @@ YourExAmount = localStorage.getItem("YourEx");
       console.log("data", data.data);
     }
     useEffect(() => {
+      console.log(YourExAmount, "YourExAmount");
       getPostdata();
-setYourEx(YourExAmount);
+       if (typeof localStorage !== "undefined") {
+
+       }
+setYourEx(localStorage.getItem("YourEx")?localStorage.getItem("YourEx"):0);
     }, []);
   return (
     <Layout>
@@ -72,9 +75,9 @@ setYourEx(YourExAmount);
                   <div className="flex items-center justify-between">
                     <div className="">
                       <h5>{dateFormate(item.date)}</h5>
-                      <h4 className="font-semibold">{item.staffname}</h4>
+                      <h4 className="font-semibold">{item.category}</h4>
                     </div>
-                    <div className="">{item.category}</div>
+                    <div className=""> {item.staffname}</div>
                     <div className="font-semibold">{item.Expense}</div>
                   </div>
                   <div className="w-full">
@@ -88,7 +91,7 @@ setYourEx(YourExAmount);
             <div className=" border-b text-[1.2rem] pl-3 border-r py-2">
               G Total Ex:
               <span className="text-[1.5rem] font-semibold ml-2">
-                {GTotalAmount}
+                {GTotalAmount?GTotalAmount:0}
               </span>
             </div>
             <div className="  border-b text-[1.2rem] pl-3 py-2 ">

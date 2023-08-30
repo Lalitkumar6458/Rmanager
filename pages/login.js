@@ -1,14 +1,20 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 
 const Login = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const key = "updatable";
     const[LoginType,setLoginType]=useState(false)
     const router = useRouter()
 
 const onFinishStaff = async (values) => {
-
+ messageApi.open({
+   key,
+   type: "loading",
+   content: "Loading...",
+ });
   event.preventDefault();
     try {
        const response = await fetch("/api/StaffLogin", {
@@ -21,11 +27,21 @@ const onFinishStaff = async (values) => {
        const data = await response.json();
 
        if (response.ok) {
+           messageApi.open({
+             key,
+             type: "success",
+             content: "Login Succesfully!",
+           });
          console.log("Login Succes to database");
          localStorage.setItem("Staff", JSON.stringify(data.User));
          router.push("/staffpage");
          localStorage.removeItem("User");
        } else {
+           messageApi.open({
+             key,
+             type: "error",
+             content: data.error,
+           });
          alert(data.error);
          console.log("Error saving data to database");
        }
@@ -38,6 +54,11 @@ alert("error"+error)
 };
 const onFinishAdmin = async (values) => {
   console.log("Success:", values);
+   messageApi.open({
+     key,
+     type: "loading",
+     content: "Loading...",
+   });
   try {
      const response = await fetch("/api/login", {
        method: "POST",
@@ -52,12 +73,22 @@ const onFinishAdmin = async (values) => {
      const data = await response.json();
      console.log("data", data);
      if (response.ok) {
+      messageApi.open({
+        key,
+        type: "success",
+        content: "Login Succesfully!",
+      });
        console.log("Data saved to database");
        localStorage.setItem("User", JSON.stringify(data.data));
        localStorage.removeItem("Staff");
 
        router.push("/Roomgroup");
      } else {
+        messageApi.open({
+          key,
+          type: "error",
+          content: data.error,
+        });
        alert(data.error);
        console.log("Error saving data to database");
      }
@@ -76,6 +107,7 @@ const onFinishFailed = (errorInfo) => {
 };
     return (
       <div className="w-full flex items-center justify-center bg-blue-950 h-screen px-4">
+        {contextHolder}
         <div className="bg-white rounded-lg flex items-center justify-center flex-col w-[95%] md:w-[40%]">
           <h2 className="text-[1.4rem] mt-3">Login</h2>
           <div className="w-full h-[50px] flex items-center justify-center ">
@@ -124,7 +156,7 @@ const onFinishFailed = (errorInfo) => {
                   >
                     <Input />
                   </Form.Item>
-             
+
                   <Form.Item
                     label="Room Group Name"
                     name="RgName"

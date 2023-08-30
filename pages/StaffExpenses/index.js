@@ -79,8 +79,7 @@ showModal()
          // setIsLoading(false);
 setExpensesData(data.data);
          // setRGroupData(data.allData);
-         console.log("data", data.data, data.totalExpenseAmount);
-         localStorage.setItem("YourEx", data.totalExpenseGroupAmount);
+         localStorage.setItem("YourEx", data.totalExpenseGroupAmount?data.totalExpenseGroupAmount:0);
        }
        useEffect(() => {
          getPostdata();

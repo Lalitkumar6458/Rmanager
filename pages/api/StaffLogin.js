@@ -14,22 +14,27 @@ export default async function handler(req, res) {
         staffemail: StaffEmail,
       }).maxTimeMS(15000);
         // Check if the group exists and its password matches
-        if (
-          group &&
-          group.password === Rgpassword &&
-          staffMember.groupId === group._id.toString()
-        ) {
-          // Both staff and group credentials match
-          console.log("login Success")
-          return res.status(200).json({
-            message: "Login successful",
-            User:staffMember,
-          });
-        } else {
-      
-          // Group not found or incorrect group password
-          return res.status(401).json({ error: "Invalid group credentials" });
+        if (staffMember){
+ if (
+   group &&
+   group.password === Rgpassword &&
+   staffMember.groupId === group._id.toString()
+ ) {
+   // Both staff and group credentials match
+   console.log("login Success");
+   return res.status(200).json({
+     message: "Login successful",
+     User: staffMember,
+   });
+ } else {
+   // Group not found or incorrect group password
+   return res.status(401).json({ error: "Invalid group credentials" });
+ }
+        }else{
+   return res.status(401).json({ error: "Invalid Email credentials" });
+
         }
+         
   
     } catch (error) {
       console.error("Error logging in:", error);

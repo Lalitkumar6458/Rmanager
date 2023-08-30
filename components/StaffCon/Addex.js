@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import dayjs from "dayjs";
-import { Button, Form, Input, InputNumber, Select, DatePicker } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  DatePicker,
+  message,
+} from "antd";
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {
@@ -13,6 +21,8 @@ const layout = {
 };
 
 const Addex = ({ editData, isEditEx, getAddedData, handleCancel }) => {
+  const [messageApi, contextHolder] = message.useMessage();
+ const key = "updatable";
   const formRef = React.useRef(null);
   const dateFormat = "DD-MM-YYYY";
   const Staff = JSON.parse(localStorage.getItem("Staff"));
@@ -39,6 +49,11 @@ const Addex = ({ editData, isEditEx, getAddedData, handleCancel }) => {
   };
   console.log(editData, "editData");
   const onFinish = async (values) => {
+     messageApi.open({
+       key,
+       type: "loading",
+       content: "Loading...",
+     });
     console.log("data", values.date.$D, values.date.$M, values.date.$y);
 let day=""
     if(values.date.$D<10){
@@ -78,6 +93,11 @@ day = values.date.$D;
  const data = await response.json();
  console.log("data", data);
  if (response.ok) {
+    messageApi.open({
+      key,
+      type: "success",
+      content: "Expense Update Succesfully!",
+    });
   formRef.current?.resetFields();
    console.log("Data Update to database");
     getAddedData();
@@ -85,6 +105,11 @@ day = values.date.$D;
    // localStorage.setItem("User", JSON.stringify(data.data))
    // router.push("\login")
  } else {
+   messageApi.open({
+     key,
+     type: "error",
+     content: "Error saving data to database",
+   });
    console.error("Error saving data to database");
  }
 
@@ -101,6 +126,11 @@ day = values.date.$D;
       const data = await response.json();
       console.log("data", data);
       if (response.ok) {
+          messageApi.open({
+            key,
+            type: "success",
+            content: "Expense Added Succesfully!",
+          });
         formRef.current?.resetFields();
         console.log("Data saved to database");
         getAddedData();
@@ -108,6 +138,11 @@ day = values.date.$D;
         // localStorage.setItem("User", JSON.stringify(data.data))
         // router.push("\login")
       } else {
+           messageApi.open({
+             key,
+             type: "error",
+             content: "Error Updating data to database",
+           });
         console.error("Error saving data to database");
       }
     }
@@ -169,96 +204,100 @@ useEffect(() => {
 }, [editData, isEditEx]);
 
   return (
-    <Form
-      {...layout}
-      ref={formRef}
-      name="control-ref"
-      onFinish={onFinish}
-      style={{
-        maxWidth: 600,
-      }}
-      initialValues={{
-        date: dayjs(formateDate(), dateFormat),
-      }}
-    >
-      <Form.Item
-        name="expense"
-        label="Expense"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <InputNumber style={{ width: "100%" }} />
-      </Form.Item>
-      <Form.Item
-        name="category"
-        label="Category"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Select
-          placeholder="Select a Category"
-          onChange={onGenderChange}
-          allowClear
-        >
-          {Staff.category.map((item) => {
-            return (
-              <Option value={item} key={item}>
-                {" "}
-                {item}
-              </Option>
-            );
-          })}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name="date"
-        label="Date"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <DatePicker className="w-full" format={dateFormat} />
-      </Form.Item>
-      <Form.Item
-        name="note"
-        label="Note"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <TextArea />
-      </Form.Item>
+    <>
+      {contextHolder}
 
-      <Form.Item className="flex items-center justify-center w-full">
-        <div className="flex items-center justify-center gap-4 w-full">
-          <Button
-            className="px-4 py-2 bg-slate-600 text-white flex items-center justify-center"
-            htmlType="submit"
+      <Form
+        {...layout}
+        ref={formRef}
+        name="control-ref"
+        onFinish={onFinish}
+        style={{
+          maxWidth: 600,
+        }}
+        initialValues={{
+          date: dayjs(formateDate(), dateFormat),
+        }}
+      >
+        <Form.Item
+          name="expense"
+          label="Expense"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <InputNumber style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item
+          name="category"
+          label="Category"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select
+            placeholder="Select a Category"
+            onChange={onGenderChange}
+            allowClear
           >
-            {isEditEx ? "Update" : "Submit"}
-          </Button>
-          {isEditEx ? null : (
+            {Staff.category.map((item) => {
+              return (
+                <Option value={item} key={item}>
+                  {" "}
+                  {item}
+                </Option>
+              );
+            })}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="date"
+          label="Date"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <DatePicker className="w-full" format={dateFormat} />
+        </Form.Item>
+        <Form.Item
+          name="note"
+          label="Note"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <TextArea />
+        </Form.Item>
+
+        <Form.Item className="flex items-center justify-center w-full">
+          <div className="flex items-center justify-center gap-4 w-full">
             <Button
-              className="px-4 py-2 border  border-gray-800 text-gray-800 flex items-center justify-center"
-              htmlType="button"
-              onClick={onReset}
+              className="px-4 py-2 bg-slate-600 text-white flex items-center justify-center"
+              htmlType="submit"
             >
-              Reset
+              {isEditEx ? "Update" : "Submit"}
             </Button>
-          )}
-        </div>
-      </Form.Item>
-    </Form>
+            {isEditEx ? null : (
+              <Button
+                className="px-4 py-2 border  border-gray-800 text-gray-800 flex items-center justify-center"
+                htmlType="button"
+                onClick={onReset}
+              >
+                Reset
+              </Button>
+            )}
+          </div>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 export default Addex;
