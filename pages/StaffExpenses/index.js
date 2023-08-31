@@ -4,6 +4,7 @@ import { Button, Modal, Popconfirm } from "antd";
 import Addex from '../../components/StaffCon/Addex';
 import { FaEdit } from 'react-icons/fa';
 import {AiFillDelete} from "react-icons/ai"
+import { ApiEndPoint } from '../../public/ApiEndPoint';
 const index = () => {
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [isEditEx, setIsEditEx] = useState(false);
@@ -72,7 +73,7 @@ showModal()
         //  setIsLoading(true);
 
          const response = await fetch(
-           `api/ExpensesStaff?userId=${Staff.userId}&groupId=${Staff.groupId}&staffId=${Staff._id}`
+           `${ApiEndPoint}Expenses?userId=${Staff.userId}&groupId=${Staff.groupId}&staffId=${Staff._id}`
          );
          const data = await response.json();
          console.log(data);
@@ -86,12 +87,12 @@ setExpensesData(data.data);
        }, []);
 
        const deleteExpenses=async(id)=>{
- const response = await fetch("/api/ExpensesStaff", {
+ const response = await fetch(`${ApiEndPoint}Expenses`, {
    method: "DELETE",
    headers: {
      "Content-Type": "application/json",
    },
-   body: JSON.stringify({ id, userId:Staff.userId }),
+   body: JSON.stringify({ id, userId: Staff.userId }),
  });
       const data = await response.json();
       console.log("data", data);

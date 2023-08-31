@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select,Checkbox,
   Col,Row } from "antd";
-
+import { ApiEndPoint } from "../../public/ApiEndPoint";
 const AddStaffForm = ({
   handleCancel,
   getAllData,
@@ -33,7 +33,7 @@ const AddStaffForm = ({
 
     if (isEditStaff) {
       ObjectData["id"] = StaffData._id;
-      const response = await fetch("/api/CreateStaff", {
+      const response = await fetch(`${ApiEndPoint}Staff`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const AddStaffForm = ({
         console.error("Error saving data to database");
       }
     } else {
-      const response = await fetch("/api/CreateStaff", {
+      const response = await fetch(`${ApiEndPoint}Staff`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Popconfirm, Spin } from "antd";
 import Layout from "../../components/Layout";
 import RGCreateForm from "../../components/RoomGroup/RGCreateForm";
+import { ApiEndPoint } from "../../public/ApiEndPoint";
 import {
   DoubleRightOutlined,
   DeleteOutlined,
@@ -42,9 +43,9 @@ const [isLoading,setIsLoading]=useState(false)
           setIsLoading(true)
           const userId = JSON.parse(localStorage.getItem("User"))._id;
 
-          const response = await fetch("/api/CreateGroup/?userId=" + userId);
+          const response = await fetch(`${ApiEndPoint}Group?userId=` + userId);
           const data = await response.json();
-          console.log(data);
+          console.log(data,"data rogrop");
           setIsLoading(false);
 
           setRGroupData(data.allData);
@@ -56,7 +57,7 @@ const [isLoading,setIsLoading]=useState(false)
             // const userId = JSON.parse(localStorage.getItem("User"))._id;
 
             const response = await fetch(
-              `api/CreateStaff?userId=${userId}&groupId=${groupId}`
+              `${ApiEndPoint}Group?userId=${userId}&groupId=${groupId}`
             );
             const data = await response.json();
             // console.log(data);
@@ -85,7 +86,7 @@ setIsEditStaff(true);
       console.log("id", id);
       const userId = JSON.parse(localStorage.getItem("User"))._id;
 
-      const response = await fetch("/api/CreateGroup", {
+      const response = await fetch(`${ApiEndPoint}Group`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +109,7 @@ setIsEditStaff(true);
       console.log("id",id)
        const userId = JSON.parse(localStorage.getItem("User"))._id;
 
-       const response = await fetch("/api/CreateStaff", {
+       const response = await fetch(`${ApiEndPoint}Staff`, {
          method: "DELETE",
          headers: {
            "Content-Type": "application/json",

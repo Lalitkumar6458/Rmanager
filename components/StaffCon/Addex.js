@@ -9,6 +9,7 @@ import {
   DatePicker,
   message,
 } from "antd";
+import { ApiEndPoint } from "../../public/ApiEndPoint";
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {
@@ -83,7 +84,7 @@ day = values.date.$D;
     if (isEditEx) {
       console.log("Edit api call", values);
       ObjectData['id']=editData._id
- const response = await fetch("/api/ExpensesStaff", {
+ const response = await fetch(`${ApiEndPoint}Expenses`, {
    method: "PUT",
    headers: {
      "Content-Type": "application/json",
@@ -116,7 +117,7 @@ day = values.date.$D;
     } else {
       console.log("Save api call", values);
 
-      const response = await fetch("/api/ExpensesStaff", {
+      const response = await fetch(`${ApiEndPoint}Expenses`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

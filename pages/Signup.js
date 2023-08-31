@@ -7,7 +7,7 @@ const Signup = () => {
     const router = useRouter()
 const onFinishAdmin = async (values) => {
   console.log("Success:", values);
-  const response = await fetch("/api/hello", {
+  const response = await fetch("http://localhost:5000/users", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

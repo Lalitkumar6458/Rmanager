@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Space } from "antd";
 const { Option } = Select;
+import { ApiEndPoint } from "../../public/ApiEndPoint";
 const areas = [
   {
     label: "Beijing",
@@ -45,7 +46,7 @@ const RGCreateForm = ({ handleCancel, getAllData, groupData, isEditGroup }) => {
       ObjectData["id"] = groupData._id
     console.log("Received values of form: edt form", values);
 
-    const response = await fetch("/api/CreateGroup", {
+    const response = await fetch(`${ApiEndPoint}Group`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +67,7 @@ const RGCreateForm = ({ handleCancel, getAllData, groupData, isEditGroup }) => {
     }
 
     }else{
-   const response = await fetch("/api/CreateGroup", {
+   const response = await fetch(`${ApiEndPoint}Group`, {
      method: "POST",
      headers: {
        "Content-Type": "application/json",

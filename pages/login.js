@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router'
 import { useState } from 'react';
 import { Button, Checkbox, Form, Input, message } from "antd";
-
+import { ApiEndPoint } from '../public/ApiEndPoint';
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const key = "updatable";
@@ -17,7 +17,7 @@ const onFinishStaff = async (values) => {
  });
   event.preventDefault();
     try {
-       const response = await fetch("/api/StaffLogin", {
+       const response = await fetch(`${ApiEndPoint}StaffLogin`, {
          method: "POST",
          headers: {
            "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const onFinishAdmin = async (values) => {
      content: "Loading...",
    });
   try {
-     const response = await fetch("/api/login", {
+     const response = await fetch(`${ApiEndPoint}login`, {
        method: "POST",
        headers: {
          "Content-Type": "application/json",
